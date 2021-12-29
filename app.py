@@ -33,8 +33,11 @@ def answer_page():
     lng = answer["lng"]
     city = answer["city"]
     lat_true, lng_true = cities[city]
-    distance_km = distance.distance((lat, lng), (lat_true, lng_true)).km
-    return render_template("answer.html", lat_answer=lat, lng_answer=lng, lat_true=lat_true, lng_true=lng_true, distance=f"{distance_km:.0f} km", city=city)
+    distance_object = distance.distance((lat, lng), (lat_true, lng_true))
+    distance_presentation = f"{distance_object.km:.0f} km"
+    if distance_object.km < 1:
+        distance_presentation = f"{distance_object.m:.0f} m"
+    return render_template("answer.html", lat_answer=lat, lng_answer=lng, lat_true=lat_true, lng_true=lng_true, distance=distance_presentation, city=city)
 
 
 if __name__ == "__main__":
