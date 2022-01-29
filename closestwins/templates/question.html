@@ -3,7 +3,7 @@
 			<div class="card text-center m-3">
 				<div class="card-body">
 					<h5 class="card-title">Locate &#128205;	</h5>
-					<h1 class="card-text mb-4">{{ city }}</h1>
+					<h1 class="card-text mb-4">{{ city_name }}</h1>
 					<div class="btn-group-vertical">
 					<form action="{{ url_for('answer_page') }}" name="answer_form" method="post">
 		                                <button type="submit" name="answer" class="btn btn-primary">Submit answer</button>
@@ -27,7 +27,7 @@
 			map.removeObject(marker_answer);
 		}
 		marker_answer = new H.map.Marker({lat: coord.lat, lng: coord.lng});
-		document.answer_form.answer.value = JSON.stringify({ lat: coord.lat, lng: coord.lng, city: '{{ city }}' });
+		document.answer_form.answer.value = JSON.stringify({ lat: coord.lat, lng: coord.lng, question_id: '{{ question_id }}', city_name: '{{ city_name }}' });
 		map.addObject(marker_answer);
 	});
 {% endblock %}

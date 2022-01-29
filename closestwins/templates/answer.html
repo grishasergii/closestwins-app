@@ -2,7 +2,7 @@
 {% block content %}
 			<div class="card text-center m-3">
 				<div class="card-body">
-					<h5 class="card-title">{{ city }}</h5>
+					<h5 class="card-title">{{ city_name }}</h5>
 					<p class="card-text mb-4">Your answer is <b>{{ distance }}</b> away from the correct location</p>
 					<a href="{{ url_for('question_page') }}" class="btn btn-primary" role="button">Next question</a>
 				</div>
