@@ -1,6 +1,7 @@
 import requests
-from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
 from closestwins.models.question import Question
 
 
@@ -9,7 +10,9 @@ class RetrySession:
         self.session = None
 
     @property
-    def _requests_retry_session(self, retries=5, backoff_factor=2, status_forcelist=(500, 502, 503, 504)):
+    def _requests_retry_session(
+        self, retries=5, backoff_factor=2, status_forcelist=(500, 502, 503, 504)
+    ):
         """Returns a retriable session"""
         if self.session:
             return self.session

@@ -10,6 +10,8 @@ requests = "*"
 
 [dev-packages]
 python-dotenv = "*"
+black = "*"
+isort = "*"
 
 [requires]
 python_version = "3.9"
