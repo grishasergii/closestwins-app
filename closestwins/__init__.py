@@ -1,3 +1,5 @@
+"""Closest wins application."""
+
 import json
 import os
 
@@ -8,8 +10,11 @@ from closestwins.api.api import QuestionsApi
 
 
 def create_app():
+    """Creates a flask app."""
     app = Flask(__name__)
-    app.jinja_env.globals.update(MAP_API_KEY=os.environ["MAP_API_KEY"])
+    app.jinja_env.globals.update(  # pylint: disable=no-member
+        MAP_API_KEY=os.environ["MAP_API_KEY"]
+    )
 
     questions_api = QuestionsApi(os.environ["QUESTIONS_API_URL"])
 

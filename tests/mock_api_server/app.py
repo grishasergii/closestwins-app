@@ -1,3 +1,4 @@
+"""Mock questions service api server."""
 import random
 from http import HTTPStatus
 
@@ -18,11 +19,13 @@ app = Flask(__name__)
 
 @app.route("/question-random", methods=["GET"])
 def question_random():
+    """Returns a random question."""
     return random.choice(questions)
 
 
 @app.route("/questions/<question_id>", methods=["GET"])
 def get_question(question_id):
+    """Returns a question by id."""
     for question in questions:
         if question["id"] == question_id:
             return question
