@@ -3,15 +3,17 @@
 import json
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 from geopy import distance
 
 from closestwins.api.api import QuestionsApi
+from werkzeug.exceptions import HTTPException
 
 
 def create_app():
     """Creates a flask app."""
     app = Flask(__name__)
+    app.config["TRAP_HTTP_EXCEPTION"] = True
     app.jinja_env.globals.update(  # pylint: disable=no-member
         MAP_API_KEY=os.environ["MAP_API_KEY"]
     )
@@ -29,7 +31,11 @@ def create_app():
 
     @app.route("/answer", methods=["POST"])
     def answer_page():
-        answer = json.loads(request.form.get("answer", "not found"))
+        answer_form = request.form.get("answer")
+        if not answer_form:
+            abort(500)
+
+        answer = json.loads(answer_form)
         question = questions_api.get_question(answer["question_id"])
 
         city_name = answer["city_name"]
@@ -54,5 +60,9 @@ def create_app():
             distance=distance_presentation,
             city_name=city_name,
         )
+
+    @app.errorhandler(500)
+    def internal_server_error(_):
+        return render_template("internal_server_error.html")
 
     return app

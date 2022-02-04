@@ -1,17 +1,17 @@
-{% extends "base.html" %}
+{% extends "base_question_answer.html" %}
 {% block content %}
-			<div class="card text-center m-3">
-				<div class="card-body">
-					<h5 class="card-title">Locate &#128205;	</h5>
-					<h1 class="card-text mb-4">{{ city_name }}</h1>
-					<div class="btn-group-vertical">
-					<form action="{{ url_for('answer_page') }}" name="answer_form" method="post">
-		                                <button type="submit" name="answer" class="btn btn-primary">Submit answer</button>
-                		        </form>
-                       			<a href="{{ url_for('question_page') }}" class="btn btn-secondary" role="button">Skip question</a>
-					</div>
-				</div>
+	<div class="card text-center m-3">
+		<div class="card-body">
+			<h5 class="card-title">Locate &#128205;	</h5>
+			<h1 class="card-text mb-4">{{ city_name }}</h1>
+			<div class="btn-group-vertical">
+				<form action="{{ url_for('answer_page') }}" name="answer_form" method="post">
+						<button type="submit" name="answer" class="btn btn-primary" id="submit_button" disabled="true">Submit answer</button>
+				</form>
+				<a href="{{ url_for('question_page') }}" class="btn btn-secondary" role="button">Skip question</a>
 			</div>
+		</div>
+	</div>
 {% endblock %}
 {% block map_script %}
 	map.setCenter({ lat: 50.45, lng: 30.52 });
@@ -22,12 +22,12 @@
 	// Add event listener:
 	map.addEventListener('tap', function(evt) { 
 		var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
-    		console.log('Clicked at ' + Math.abs(coord.lat.toFixed(4)) + ((coord.lat > 0) ? 'N' : 'S') + ' ' + Math.abs(coord.lng.toFixed(4)) + ((coord.lng > 0) ? 'E' : 'W'));
   		if (!(marker_answer == null)																																																																										) {
 			map.removeObject(marker_answer);
 		}
 		marker_answer = new H.map.Marker({lat: coord.lat, lng: coord.lng});
 		document.answer_form.answer.value = JSON.stringify({ lat: coord.lat, lng: coord.lng, question_id: '{{ question_id }}', city_name: '{{ city_name }}' });
 		map.addObject(marker_answer);
+		document.getElementById("submit_button").disabled = false;
 	});
 {% endblock %}
