@@ -1,6 +1,6 @@
 {% extends "base_question_answer.html" %}
 {% block content %}
-			<div class="card text-center m-3">
+				<div class="card text-center m-3">
 				<div class="card-body">
 					<h5 class="card-title">{{ city_name }}</h5>
 					<p class="card-text mb-4">Your answer is <b>{{ distance }}</b> away from the correct location</p>
@@ -12,26 +12,41 @@
 
 	{% block map_script %}
 
-	map.setCenter({ lat: {{ lat_true|tojson }}, lng: {{ lng_true|tojson }} });
-	map.setZoom(5);
-
-        point_answer = {lat: {{ lat_answer|tojson }}, lng: {{ lng_answer|tojson }} };
-        point_correct_location = {lat: {{ lat_true|tojson }}, lng: {{ lng_true|tojson }} };
+	point_answer = {lat: {{ lat_answer|tojson }}, lng: {{ lng_answer|tojson }} };
+	point_correct_location = {lat: {{ lat_true|tojson }}, lng: {{ lng_true|tojson }} };
 
 	marker_answer = new H.map.Marker(point_answer);
 	
 	var icon = new H.map.Icon('https://img.icons8.com/color/48/000000/marker--v1.png');
 	marker_true = new H.map.Marker(point_correct_location, {icon: icon});
-	
-	map.addObject(marker_answer);
-	map.addObject(marker_true);
-	
+
 	var line_string = new H.geo.LineString();
 	line_string.pushPoint(point_answer);
 	line_string.pushPoint(point_correct_location);
 
 	var polyline = new H.map.Polyline(line_string, {style: {lineWidth: 2, strokeColor: 'black', lineDash: [2, 4]}});
+	var circle = new H.map.Circle(
+		point_correct_location,
+		10000,
+		{
+			style: {
+				strokeColor: "rgba(55, 85, 170, 0.6)",
+				fillColor: "rgba(0, 128, 0, 0.1)",
+				lineWidth: 2
+			}
+		}
+	);
 
-	map.addObject(polyline);
+	group = new H.map.Group();
+	group.addObjects([marker_answer, marker_true, polyline, circle]);
+	map.addObject(group);
+	map.getViewModel().setLookAtData({
+		bounds: group.getBoundingBox()
+	});
+	{% if zoom is defined %}
+		console.log(`zoom: {{ zoom }}`);
+		map.setZoom({{ zoom }});
+	{% endif %}
+
 
 	{% endblock %}

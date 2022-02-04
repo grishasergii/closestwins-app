@@ -50,6 +50,11 @@ def create_app():
 
         if distance_object.km < 1:
             distance_presentation = f"{distance_object.m:.0f} m"
+        zoom = None
+        if distance_object.km < 40:
+            zoom = 10
+        if distance_object.km < 20:
+            zoom = 11
 
         return render_template(
             "answer.html",
@@ -59,6 +64,7 @@ def create_app():
             lng_true=lng_true,
             distance=distance_presentation,
             city_name=city_name,
+            zoom=zoom
         )
 
     @app.errorhandler(500)
