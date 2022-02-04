@@ -26,10 +26,11 @@ jobs:
         with:
           node-version: 17
       - run: npm ci
-      - name: Provision PR stack
+      - name: Deploy
         uses: dhollerbach/github-action-serverless-with-python-requirements@master
         with:
-          args: --stage master
+          args: -c "serverless deploy --stage master"
+          entrypoint: /bin/bash
         env:
           AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
           AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
