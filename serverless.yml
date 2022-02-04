@@ -1,0 +1,70 @@
+---
+service: closetwins-app
+frameworkVersion: "3"
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-1
+  stage: prod
+  stackTags:
+    Name: Closestwins-App
+    Version: 0.1.0
+    Application: Closestwins
+    Component: App
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: execute-api:Invoke
+          Resource: !Sub
+            - "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${closestwins_api_id}/${env:SHARED_API_BRANCH}/*/*"
+            - closestwins_api_id:
+                Fn::ImportValue:
+                  !Sub "closestwins-api-RestApiId-${env:ENVIRONMENT}-${env:SHARED_API_BRANCH}-${AWS::Region}"
+  apiGateway:
+    shouldStartNameWithService: true
+  # lambdaHashingVersion: 20201221
+  deploymentBucket:
+    name: ${env:AWS_CLOSESTWINS_ARTIFACTS_BUCKET}
+
+
+functions:
+  closestwins-app:
+    handler: wsgi_handler.handler
+    environment:
+      API_ENDPOINT: !Sub
+        - "https://${closestwins_api_id}.execute-api.${AWS::Region}.amazonaws.com/${env:SHARED_API_BRANCH}"
+        - closestwins_api_id:
+            Fn::ImportValue:
+              !Sub "closestwins-api-RestApiId-${env:ENVIRONMENT}-${env:SHARED_API_BRANCH}-${AWS::Region}"
+      MAP_API_KEY: ${env:MAP_API_KEY}
+      # GOOGLE_ANALYTICS_ID: ${env:GOOGLE_ANALYTICS_ID}
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{proxy+}
+          method: ANY
+
+
+custom:
+  wsgi:
+    app: app.app
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+
+package:
+  excludeDevDependencies: true
+  exclude:
+    - node_modules/**
+    - venv/**
+    - Pipfile
+    - Pipfile.lock
+    - readme.md
+    - package-lock.json
+    - package.json
