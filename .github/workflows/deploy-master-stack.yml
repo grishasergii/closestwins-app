@@ -32,7 +32,7 @@ jobs:
           args: --stage master
         env:
           AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
           SHARED_API_BRANCH: master
           ENVIRONMENT: prod
           MAP_API_KEY: ${{ secrets.MAP_API_KEY }}
