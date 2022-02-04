@@ -1,0 +1,31 @@
+name: PR cleanup
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-pr-stack:
+    name: Delete PR stack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 17
+      - run: npm ci
+      - name: Remove PR stack
+        uses: serverless/github-action@master
+        with:
+          args: -c "serverless remove --stage pr-${{ github.event.number }}"
+          entrypoint: /bin/bash
+        env:
+          AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          SHARED_API_BRANCH: master
+          ENVIRONMENT: prod
+          MAP_API_KEY: ${{ secrets.MAP_API_KEY }}
