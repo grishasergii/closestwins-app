@@ -12,16 +12,17 @@
 
 <div class="container-fluid g-0" style="height: 100%">
 	<div class="row g-0" style="height: 100%">
-		<div class="col bg-light">
-                        <div class="card bg-secondary text-white m-3">
-                                <div class="card-body">
-                                        <h3 class="card-title">Closest Wins &#11088; &#127919;</h3>
-                                </div>
-                        </div>
-			{% block content %}
-			{% endblock  %}
+		<div class="col-md-3 bg-light">
+			<div class="card bg-secondary text-white m-3">
+					<div class="card-body">
+							<h3 class="card-title">Closest Wins &#11088; &#127919;</h3>
+					</div>
+			</div>
+			{% block content %}	{% endblock  %}
 		</div>
-		<div class="col-9"><div id="mapContainer"></div></div>
+		<div class="col-md-9">
+			<div id="mapContainer"></div>
+		</div>
 	</div>
 </div>
 
