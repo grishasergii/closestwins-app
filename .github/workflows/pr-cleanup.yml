@@ -18,11 +18,10 @@ jobs:
         with:
           node-version: 17
       - run: npm ci
+      - name: Install Serveless
+        run: npm install -g serverless
       - name: Remove PR stack
-        uses: serverless/github-action@master
-        with:
-          args: -c "serverless remove --stage pr-${{ github.event.number }}"
-          entrypoint: /bin/bash
+        run: serverless remove --stage pr-${{ github.event.number }}
         env:
           AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
           AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
