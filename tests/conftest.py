@@ -12,7 +12,8 @@ def testing_env(monkeypatch):
     """Set ENV variables for testing."""
     monkeypatch.setenv("FLASK_ENV", "development")
     monkeypatch.setenv("MAP_API_KEY", "dummy")
-    monkeypatch.setenv("QUESTIONS_API_URL", "http://127.0.0.1:5002")
+    monkeypatch.setenv("API_ENDPOINT", "http://127.0.0.1:5002")
+    monkeypatch.setenv("AWS_REGION", "erathia-west-1")
 
 
 @pytest.fixture(scope="module")

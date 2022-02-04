@@ -16,13 +16,15 @@ def create_app():
         MAP_API_KEY=os.environ["MAP_API_KEY"]
     )
 
-    questions_api = QuestionsApi(os.environ["QUESTIONS_API_URL"])
+    questions_api = QuestionsApi(os.environ["API_ENDPOINT"], os.environ["AWS_REGION"])
 
     @app.route("/")
     def question_page():
         question = questions_api.get_random_question()
         return render_template(
-            "question.html", city_name=question.city_name, question_id=question.id
+            "question.html",
+            city_name=question.city_name,
+            question_id=question.question_id,
         )
 
     @app.route("/answer", methods=["POST"])

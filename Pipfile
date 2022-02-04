@@ -12,7 +12,7 @@ boto3 = "*"
 
 [dev-packages]
 python-dotenv = "*"
-black = "*"
+black = "==21.10b0"
 isort = "*"
 pylint = "*"
 pytest = "*"
@@ -21,3 +21,6 @@ pylint-pytest = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true

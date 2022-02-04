@@ -1,5 +1,8 @@
 """REST Api wrapper."""
+from urllib.parse import urlparse
+
 import requests
+from aws_requests_auth.boto_utils import BotoAWSRequestsAuth
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -43,12 +46,19 @@ class RetrySession:  # pylint: disable=too-few-public-methods
 class QuestionsApi:
     """Questions service api wrapper."""
 
-    def __init__(self, base_url):
+    def __init__(self, base_url, aws_region):
         self.base_url = base_url
         self.session = RetrySession()
+        self.aws_region = aws_region
 
     def _get_from_api(self, resource, params=None):
-        response = self.session.get(f"{self.base_url}/{resource}", params=params)
+        api_url = f"{self.base_url}/{resource}"
+        api_host = urlparse(api_url).netloc
+        auth = BotoAWSRequestsAuth(
+            aws_host=api_host, aws_region=self.aws_region, aws_service="execute-api"
+        )
+
+        response = self.session.get(api_url, auth=auth, params=params)
         response.raise_for_status()
         if response.text:
             return response.json()
