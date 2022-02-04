@@ -3,3 +3,12 @@
 *.swp
 __pycache__
 .DS_Store
+
+# Serverless
+.serverless
+serverless_wsgi.py
+wsgi_handler.py
+.serverless-wsgi
+
+# NPM
+node_modules
