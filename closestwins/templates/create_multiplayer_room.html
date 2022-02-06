@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-5 m-5 bg-dark text-white">
+                <div class="error-template">
+                    <h2>
+                        Create a room
+                    </h2>
+                    <form action="{{ url_for('create_multiplayer_room') }}" name="room_settings" method="post">
+                        <div class="mb-3">
+                            <label for="number_of_questions" class="form-label">Number of questions</label>
+                            <select class="form-select" id="number_of_questions" name="number_of_questions">
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option selected value=5>5</option>
+                                <option value=6>6</option>
+                                <option value=7>7</option>
+                                <option value=8>8</option>
+                                <option value=9>9</option>
+                                <option value=10>10</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="duration_of_round_seconds" class="form-label">Duration of round, seconds</label>
+                            <select class="form-select" id="duration_of_round_seconds" name="duration_of_round_seconds">
+                                <option value=10>10</option>
+                                <option value=20>20</option>
+                                <option selected value=30>30</option>
+                                <option value=45>45</option>
+                                <option value=60>60</option>
+                                <option value=90>90</option>
+                                <option value=120>120</option>
+                           </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

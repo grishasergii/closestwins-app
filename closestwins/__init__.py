@@ -29,6 +29,17 @@ def create_app():
             question_id=question.question_id,
         )
 
+    @app.route("/create-multiplayer-room", methods=["GET", "POST"])
+    def create_multiplayer_room():
+        if request.method == "GET":
+            return render_template("create_multiplayer_room.html")
+
+        room_settings = request.form
+        if not room_settings:
+            abort(500)
+        # create room
+        return render_template("lobby.html")
+
     @app.route("/answer", methods=["POST"])
     def answer_page():
         answer_form = request.form.get("answer")
