@@ -76,7 +76,9 @@ class ClosestwinsApi:
             aws_host=api_host, aws_region=self.aws_region, aws_service="execute-api"
         )
 
-        response = self.session.post(api_url, auth=auth, params=params, data=json.dumps(data))
+        response = self.session.post(
+            api_url, auth=auth, params=params, data=json.dumps(data)
+        )
         response.raise_for_status()
         if response.text:
             return response.json()

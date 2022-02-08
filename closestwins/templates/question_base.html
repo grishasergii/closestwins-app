@@ -19,13 +19,15 @@
 	// Add event listener:
 	map.addEventListener('tap', function(evt) {
 		var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
-		if (!(marker_answer == null)																																																																										) {
+		if (!(marker_answer == null)) {
 			map.removeObject(marker_answer);
 		}
 		marker_answer = new H.map.Marker({lat: coord.lat, lng: coord.lng});
-		document.answer_form.answer.value = JSON.stringify({ lat: coord.lat, lng: coord.lng, question_id: '{{ question_id }}', city_name: '{{ city_name }}' });
 		map.addObject(marker_answer);
-		document.getElementById("submit_button").disabled = false;
+		if (!!document.answer_form) {
+			document.answer_form.answer.value = JSON.stringify({ lat: coord.lat, lng: coord.lng, question_id: '{{ question_id }}', city_name: '{{ city_name }}' });
+			document.getElementById("submit_button").disabled = false;
+		}
 	});
 </script>
 {% endblock %}

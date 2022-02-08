@@ -18,7 +18,9 @@ def create_app():
         MAP_API_KEY=os.environ["MAP_API_KEY"]
     )
 
-    closestwins_api = ClosestwinsApi(os.environ["REST_API_ENDPOINT"], os.environ["AWS_REGION"])
+    closestwins_api = ClosestwinsApi(
+        os.environ["REST_API_ENDPOINT"], os.environ["AWS_REGION"]
+    )
 
     @app.route("/")
     def question_page():
@@ -41,22 +43,40 @@ def create_app():
         room_settings = {
             "settings": {
                 "number_of_questions": int(form_data["number_of_questions"]),
-                "round_duration_seconds": int(form_data["round_duration_seconds"])
+                "round_duration_seconds": int(form_data["round_duration_seconds"]),
             }
         }
 
         room_id = closestwins_api.create_room(room_settings)
 
-        return render_template("lobby.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], is_owner=True, invite_link=url_for("lobby", room_id=room_id, _external=True))
+        return render_template(
+            "lobby.html",
+            room_id=room_id,
+            websocket_url=os.environ["WEBSOCKET_URL"],
+            is_owner=True,
+            invite_link=url_for("lobby", room_id=room_id, _external=True),
+        )
 
     @app.route("/lobby/<room_id>")
     def lobby(room_id):
-        return render_template("lobby.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], is_owner=False)
+        return render_template(
+            "lobby.html",
+            room_id=room_id,
+            websocket_url=os.environ["WEBSOCKET_URL"],
+            is_owner=False,
+        )
 
     @app.route("/game/<room_id>")
     def game(room_id):
         round_duration_seconds = 30
-        return render_template("room.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], round_duration_seconds=round_duration_seconds)
+        return render_template(
+            "room.html",
+            city_name="question.city_name",
+            question_id="question.question_id",
+            room_id=room_id,
+            websocket_url=os.environ["WEBSOCKET_URL"],
+            round_duration_seconds=round_duration_seconds,
+        )
 
     @app.route("/answer", methods=["POST"])
     def answer_page():
@@ -93,7 +113,7 @@ def create_app():
             lng_true=lng_true,
             distance=distance_presentation,
             city_name=city_name,
-            zoom=zoom
+            zoom=zoom,
         )
 
     @app.errorhandler(500)
