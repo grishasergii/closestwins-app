@@ -3,10 +3,10 @@
 import json
 import os
 
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, url_for
 from geopy import distance
 
-from closestwins.api.api import QuestionsApi
+from closestwins.api.api import ClosestwinsApi
 from werkzeug.exceptions import HTTPException
 
 
@@ -18,11 +18,11 @@ def create_app():
         MAP_API_KEY=os.environ["MAP_API_KEY"]
     )
 
-    questions_api = QuestionsApi(os.environ["API_ENDPOINT"], os.environ["AWS_REGION"])
+    closestwins_api = ClosestwinsApi(os.environ["REST_API_ENDPOINT"], os.environ["AWS_REGION"])
 
     @app.route("/")
     def question_page():
-        question = questions_api.get_random_question()
+        question = closestwins_api.get_random_question()
         return render_template(
             "question.html",
             city_name=question.city_name,
@@ -34,11 +34,28 @@ def create_app():
         if request.method == "GET":
             return render_template("create_multiplayer_room.html")
 
-        room_settings = request.form
-        if not room_settings:
+        form_data = request.form
+        if not form_data:
             abort(500)
-        # create room
-        return render_template("lobby.html")
+
+        room_settings = {
+            "settings": {
+                "number_of_questions": int(form_data["number_of_questions"]),
+                "round_duration_seconds": int(form_data["round_duration_seconds"])
+            }
+        }
+
+        room_id = closestwins_api.create_room(room_settings)
+
+        return render_template("lobby.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], is_owner=True, invite_link=url_for("lobby", room_id=room_id, _external=True))
+
+    @app.route("/lobby/<room_id>")
+    def lobby(room_id):
+        return render_template("lobby.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], is_owner=False)
+
+    @app.route("/game/<room_id>")
+    def game(room_id):
+        pass
 
     @app.route("/answer", methods=["POST"])
     def answer_page():
@@ -47,7 +64,7 @@ def create_app():
             abort(500)
 
         answer = json.loads(answer_form)
-        question = questions_api.get_question(answer["question_id"])
+        question = closestwins_api.get_question(answer["question_id"])
 
         city_name = answer["city_name"]
         lat = answer["lat"]

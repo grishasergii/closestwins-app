@@ -34,12 +34,13 @@ functions:
   closestwins-app:
     handler: wsgi_handler.handler
     environment:
-      API_ENDPOINT: !Sub
+      REST_API_ENDPOINT: !Sub
         - "https://${closestwins_api_id}.execute-api.${AWS::Region}.amazonaws.com/${env:SHARED_API_BRANCH}"
         - closestwins_api_id:
             Fn::ImportValue:
               !Sub "closestwins-api-RestApiId-${env:ENVIRONMENT}-${env:SHARED_API_BRANCH}-${AWS::Region}"
       MAP_API_KEY: ${env:MAP_API_KEY}
+      WEBSOCKET_URL: dummy
       # GOOGLE_ANALYTICS_ID: ${env:GOOGLE_ANALYTICS_ID}
     events:
       - http:
