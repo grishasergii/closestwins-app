@@ -4,26 +4,22 @@
 		<div class="card-body">
 			<h5 class="card-title">Locate &#128205;	</h5>
 			<h1 class="card-text mb-4">{{ city_name }}</h1>
-			<div class="btn-group-vertical">
-				<form action="{{ url_for('answer_page') }}" name="answer_form" method="post">
-						<button type="submit" name="answer" class="btn btn-primary" id="submit_button" disabled="true">Submit answer</button>
-				</form>
-				<a href="{{ url_for('question_page') }}" class="btn btn-secondary mb-3" role="button">Skip question</a>
-				<a href="{{ url_for('create_multiplayer_room') }}" class="btn btn-success" role="button">Multiplayer</a>
-			</div>
+			{% block question_controls %}{% endblock %}
 		</div>
 	</div>
 {% endblock %}
-{% block map_script %}
+{% block script %}
+{{ super() }}
+<script>
 	map.setCenter({ lat: 50.45, lng: 30.52 });
 	map.setZoom(3);
 
 	var marker_answer = null;
-	
+
 	// Add event listener:
-	map.addEventListener('tap', function(evt) { 
+	map.addEventListener('tap', function(evt) {
 		var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
-  		if (!(marker_answer == null)																																																																										) {
+		if (!(marker_answer == null)																																																																										) {
 			map.removeObject(marker_answer);
 		}
 		marker_answer = new H.map.Marker({lat: coord.lat, lng: coord.lng});
@@ -31,4 +27,5 @@
 		map.addObject(marker_answer);
 		document.getElementById("submit_button").disabled = false;
 	});
+</script>
 {% endblock %}

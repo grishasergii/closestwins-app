@@ -1,0 +1,27 @@
+{% extends "question_base.html" %}
+
+{% block question_controls %}
+<div>
+    <h1 id="timer"></h1>
+    <p>Your answer will be submitted automatically when the time expires</p>
+    <h3>Users in the room </h3>
+    <ul id="users-in-the-room"></ul>
+</div>
+{% endblock %}
+
+{% block body %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+
+    {{ super() }}
+
+    <script>
+        $(document).ready(function() {
+            setupWebSocket("{{ websocket_url }}", "{{ room_id }}");
+            start_countdown({{ round_duration_seconds }}, $("#timer"))
+            start_countdown(40, $("#timer2"))
+        });
+    </script>
+{% endblock %}

@@ -24,7 +24,7 @@ def create_app():
     def question_page():
         question = closestwins_api.get_random_question()
         return render_template(
-            "question.html",
+            "question_single_player.html",
             city_name=question.city_name,
             question_id=question.question_id,
         )
@@ -55,7 +55,8 @@ def create_app():
 
     @app.route("/game/<room_id>")
     def game(room_id):
-        pass
+        round_duration_seconds = 30
+        return render_template("room.html", room_id=room_id, websocket_url=os.environ["WEBSOCKET_URL"], round_duration_seconds=round_duration_seconds)
 
     @app.route("/answer", methods=["POST"])
     def answer_page():

@@ -10,8 +10,9 @@
 {% endblock %}
 
 
-	{% block map_script %}
-
+{% block script %}
+{{ super() }}
+<script>
 	point_answer = {lat: {{ lat_answer|tojson }}, lng: {{ lng_answer|tojson }} };
 	point_correct_location = {lat: {{ lat_true|tojson }}, lng: {{ lng_true|tojson }} };
 
@@ -48,5 +49,5 @@
 		map.setZoom({{ zoom }});
 	{% endif %}
 
-
-	{% endblock %}
+</script>
+{% endblock %}

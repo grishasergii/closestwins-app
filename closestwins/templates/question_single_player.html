@@ -1,0 +1,11 @@
+{% extends "question_base.html" %}
+
+{% block question_controls %}
+<div class="btn-group-vertical">
+    <form action="{{ url_for('answer_page') }}" name="answer_form" method="post">
+        <button type="submit" name="answer" class="btn btn-primary" id="submit_button" disabled="true">Submit answer</button>
+    </form>
+    <a href="{{ url_for('question_page') }}" class="btn btn-secondary mb-3" role="button">Skip question</a>
+    <a href="{{ url_for('create_multiplayer_room') }}" class="btn btn-success" role="button">Multiplayer</a>
+</div>
+{% endblock %}

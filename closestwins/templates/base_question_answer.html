@@ -27,6 +27,7 @@
 	</div>
 </div>
 
+{% block script %}
 <script>
       // Initialize the platform object:
       var platform = new H.service.Platform({
@@ -53,9 +54,8 @@
 	var behavior = new H.mapevents.Behavior(mapEvents);
 
 	var ui = H.ui.UI.createDefault(map, maptypes); 
-
-	{% block map_script %}
-	{% endblock %}
 </script>
+
+{% endblock %}
 
 {% endblock  %}
