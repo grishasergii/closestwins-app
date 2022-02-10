@@ -7,7 +7,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import json
 
-from closestwins.models.question import Question
+from closestwins.models.question import Question, Room
 
 
 class RetrySession:  # pylint: disable=too-few-public-methods
@@ -93,6 +93,11 @@ class ClosestwinsApi:
         """Returns a question by its id."""
         response = self._get_from_api(f"questions/{question_id}")
         return Question(**response)
+
+    def get_room(self, room_id):
+        """Returns a question by its id."""
+        response = self._get_from_api(f"rooms/{room_id}")
+        return Room(**response)
 
     def create_room(self, room_settings):
         """Create a multiplayer room."""

@@ -19,9 +19,8 @@
 
     <script>
         $(document).ready(function() {
-            setupWebSocket("{{ websocket_url }}", "{{ room_id }}");
-            start_countdown({{ round_duration_seconds }}, $("#timer"))
-            start_countdown(40, $("#timer2"))
+            setupWebSocket("{{ websocket_url }}", "{{ room_id }}", {{ round_duration_seconds }});
+
         });
     </script>
 {% endblock %}

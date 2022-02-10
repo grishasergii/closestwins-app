@@ -8,6 +8,7 @@ from geopy import distance
 
 from closestwins.api.api import ClosestwinsApi
 from werkzeug.exceptions import HTTPException
+from requests.exceptions import HTTPError
 
 
 def create_app():
@@ -68,14 +69,20 @@ def create_app():
 
     @app.route("/game/<room_id>")
     def game(room_id):
-        round_duration_seconds = 30
+        try:
+            room = closestwins_api.get_room(room_id)
+        except HTTPError as error:
+            if error.response.status_code == 404:
+                return abort(404)
+            return abort(500)
+
         return render_template(
             "room.html",
             city_name="question.city_name",
             question_id="question.question_id",
             room_id=room_id,
             websocket_url=os.environ["WEBSOCKET_URL"],
-            round_duration_seconds=round_duration_seconds,
+            round_duration_seconds=room.settings.round_duration_seconds,
         )
 
     @app.route("/answer", methods=["POST"])
@@ -119,5 +126,9 @@ def create_app():
     @app.errorhandler(500)
     def internal_server_error(_):
         return render_template("internal_server_error.html")
+
+    @app.errorhandler(404)
+    def internal_server_error(_):
+        return render_template("not_found_error.html")
 
     return app
