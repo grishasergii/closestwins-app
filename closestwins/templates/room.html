@@ -3,7 +3,9 @@
 {% block question_controls %}
 <div>
     <h1 id="timer"></h1>
+    <p id="question-number"></p>
     <p>Your answer will be submitted automatically when the time expires</p>
+    <ul id="leaderboard"></ul>
     <h3>Users in the room </h3>
     <ul id="users-in-the-room"></ul>
 </div>
@@ -18,6 +20,8 @@
     {{ super() }}
 
     <script>
+        var question_id = null;
+
         $(document).ready(function() {
             setupWebSocket("{{ websocket_url }}", "{{ room_id }}", {{ round_duration_seconds }});
 
