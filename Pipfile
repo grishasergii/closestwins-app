@@ -9,6 +9,8 @@ geopy = "*"
 requests = "*"
 aws-requests-auth = "*"
 boto3 = "*"
+markupsafe = "==2.0.1"
+generic-api-wrapper = "*"
 
 [dev-packages]
 python-dotenv = "*"

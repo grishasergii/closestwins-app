@@ -20,7 +20,7 @@ def create_app():
     )
 
     closestwins_api = ClosestwinsApi(
-        os.environ["REST_API_ENDPOINT"], os.environ["AWS_REGION"]
+        os.environ["REST_API_ENDPOINT"]
     )
 
     @app.route("/")
