@@ -14,6 +14,7 @@
 {% block script %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
 
@@ -21,9 +22,9 @@
 
     <script>
         var question_id = null;
-
+        var user_name = $.cookie("user-name");
         $(document).ready(function() {
-            setupWebSocket("{{ websocket_url }}", "{{ room_id }}", {{ round_duration_seconds }});
+            setupWebSocket("{{ websocket_url }}", "{{ room_id }}", {{ round_duration_seconds }}, user_name);
 
         });
     </script>

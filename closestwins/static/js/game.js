@@ -43,8 +43,8 @@ function clear_map(map) {
 
 
 // Connect to the WebSocket and setup listeners
-function setupWebSocket(endpoint, room_id, round_duration_seconds) {
-    socket = new ReconnectingWebSocket(endpoint + "?room=" + room_id);
+function setupWebSocket(endpoint, room_id, round_duration_seconds, user_name) {
+    socket = new WebSocket(endpoint + "?room=" + room_id + "&username=" + encodeURIComponent(user_name));
 
     socket.onopen = function(event) {
         console.log("Socket is open!");
@@ -75,7 +75,7 @@ function setupWebSocket(endpoint, room_id, round_duration_seconds) {
 
         if (message_type === "users_in_the_room") {
             var users_list = "";
-            message_data["users"].forEach(element => users_list += `<li>${element}</li>`);
+            message_data["users"].forEach(element => users_list += `<li>${element["user_name"]}</li>`);
             $("#users-in-the-room").html(users_list);
         }
 

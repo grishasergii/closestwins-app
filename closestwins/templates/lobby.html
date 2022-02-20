@@ -14,18 +14,22 @@
                         Users waiting in the lobby
                     </h2>
                     <ul id="users-in-the-lobby"></ul>
+                    {% if is_owner %}
                     <a href="{{ url_for('game', room_id=room_id) }}" class="btn btn-success" role="button">Start game</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/lobby.js') }}"></script>
     <script>
         $(document).ready(function() {
-            setupWebSocket("{{ websocket_url }}", "{{ room_id }}");
+            var user_name = $.cookie("user-name");
+            setupWebSocket("{{ websocket_url }}", "{{ room_id }}", user_name);
         });
     </script>
 {% endblock %}

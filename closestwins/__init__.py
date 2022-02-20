@@ -3,11 +3,10 @@
 import json
 import os
 
-from flask import Flask, render_template, request, abort, url_for
+from flask import Flask, render_template, request, abort, url_for, make_response
 from geopy import distance
 
 from closestwins.api.api import ClosestwinsApi
-from werkzeug.exceptions import HTTPException
 from requests.exceptions import HTTPError
 
 
@@ -41,6 +40,7 @@ def create_app():
         if not form_data:
             abort(500)
 
+        user_name = form_data["user-name"]
         room_settings = {
             "settings": {
                 "number_of_questions": int(form_data["number_of_questions"]),
@@ -49,14 +49,15 @@ def create_app():
         }
 
         room_id = closestwins_api.create_room(room_settings)
-
-        return render_template(
+        response = make_response(render_template(
             "lobby.html",
             room_id=room_id,
             websocket_url=os.environ["WEBSOCKET_URL"],
             is_owner=True,
             invite_link=url_for("lobby", room_id=room_id, _external=True),
-        )
+        ))
+        response.set_cookie("user-name", user_name)
+        return response
 
     @app.route("/lobby/<room_id>")
     def lobby(room_id):

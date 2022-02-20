@@ -1,8 +1,8 @@
 var socket;
 
 // Connect to the WebSocket and setup listeners
-function setupWebSocket(endpoint, room_id) {
-    socket = new ReconnectingWebSocket(endpoint + "?room=" + room_id);
+function setupWebSocket(endpoint, room_id, user_name) {
+    socket = new WebSocket(endpoint + "?room=" + room_id + "&username=" + encodeURIComponent(user_name));
 
     socket.onopen = function(event) {
         console.log("Socket is open!");
@@ -19,7 +19,7 @@ function setupWebSocket(endpoint, room_id) {
         var message_type = message_data["message_type"];
         if (message_type === "users_in_the_room") {
             var users_list = "";
-            message_data["users"].forEach(element => users_list += `<li>${element}</li>`);
+            message_data["users"].forEach(element => users_list += `<li>${element["user_name"]}</li>`);
             $("#users-in-the-lobby").html(users_list);
         }
     };
