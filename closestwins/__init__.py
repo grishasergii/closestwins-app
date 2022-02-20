@@ -54,19 +54,35 @@ def create_app():
             room_id=room_id,
             websocket_url=os.environ["WEBSOCKET_URL"],
             is_owner=True,
-            invite_link=url_for("lobby", room_id=room_id, _external=True),
+            invite_link=url_for("join", room_id=room_id, _external=True),
         ))
-        response.set_cookie("user-name", user_name)
+        response.set_cookie("user-name", user_name, max_age=10 * 60 * 60 * 24)
         return response
 
-    @app.route("/lobby/<room_id>")
-    def lobby(room_id):
+    @app.route("/join/<room_id>")
+    def join(room_id):
         return render_template(
-            "lobby.html",
-            room_id=room_id,
-            websocket_url=os.environ["WEBSOCKET_URL"],
-            is_owner=False,
+            "join_room.html",
+            room_id=room_id
         )
+
+    @app.route("/lobby/<room_id>", methods=["GET", "POST"])
+    def lobby(room_id):
+        response = make_response(
+            render_template(
+                "lobby.html",
+                room_id=room_id,
+                websocket_url=os.environ["WEBSOCKET_URL"],
+                is_owner=False,
+            )
+        )
+
+        form_data = request.form
+        if form_data:
+            user_name = form_data["user-name"]
+            response.set_cookie("user-name", user_name, max_age=10 * 60 * 60 * 24)
+
+        return response
 
     @app.route("/game/<room_id>")
     def game(room_id):
