@@ -24,7 +24,7 @@ jobs:
         run: serverless remove --stage testing-pr-${{ github.event.number }}
         env:
           AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
           SHARED_API_BRANCH: master
-          ENVIRONMENT: prod
+          ENVIRONMENT: testing
           MAP_API_KEY: ${{ secrets.MAP_API_KEY }}
