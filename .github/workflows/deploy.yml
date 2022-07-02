@@ -10,19 +10,19 @@ on:
         description: "An environment passed from the caller workflow"
         required: true
         type: string
-      secrets:
-        aws_access_key_id:
-          required: true
-        aws_secret_access_key:
-          required: true
-        aws_region:
-          required: true
-        artifacts_bucket:
-          required: true
-        cfn_bucket:
-          required: true
-        map_api_key:
-          required: true
+    secrets:
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+      aws_region:
+        required: true
+      artifacts_bucket:
+        required: true
+      cfn_bucket:
+        required: true
+      map_api_key:
+        required: true
 
 jobs:
   provision-stack:
