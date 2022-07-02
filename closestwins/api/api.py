@@ -1,5 +1,6 @@
 """REST Api wrapper."""
 import json
+
 from generic_api_wrapper import Api, AwsIamAuth
 
 from closestwins.models.question import Question, Room

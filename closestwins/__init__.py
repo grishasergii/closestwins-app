@@ -3,11 +3,12 @@
 import json
 import os
 
-from flask import Flask, render_template, request, abort, url_for, make_response
+from flask import Flask, abort, make_response, render_template, request, url_for
 from geopy import distance
+from requests.exceptions import HTTPError
 
 from closestwins.api.api import ClosestwinsApi
-from requests.exceptions import HTTPError
+from closestwins.utils import disable
 
 
 def create_app():
@@ -18,9 +19,7 @@ def create_app():
         MAP_API_KEY=os.environ["MAP_API_KEY"]
     )
 
-    closestwins_api = ClosestwinsApi(
-        os.environ["REST_API_ENDPOINT"]
-    )
+    closestwins_api = ClosestwinsApi(os.environ["REST_API_ENDPOINT"])
 
     @app.route("/")
     def question_page():
@@ -32,6 +31,7 @@ def create_app():
         )
 
     @app.route("/create-multiplayer-room", methods=["GET", "POST"])
+    @disable
     def create_multiplayer_room():
         if request.method == "GET":
             return render_template("create_multiplayer_room.html")
@@ -49,24 +49,25 @@ def create_app():
         }
 
         room_id = closestwins_api.create_room(room_settings)
-        response = make_response(render_template(
-            "lobby.html",
-            room_id=room_id,
-            websocket_url=os.environ["WEBSOCKET_URL"],
-            is_owner=True,
-            invite_link=url_for("join", room_id=room_id, _external=True),
-        ))
+        response = make_response(
+            render_template(
+                "lobby.html",
+                room_id=room_id,
+                websocket_url=os.environ["WEBSOCKET_URL"],
+                is_owner=True,
+                invite_link=url_for("join", room_id=room_id, _external=True),
+            )
+        )
         response.set_cookie("user-name", user_name, max_age=10 * 60 * 60 * 24)
         return response
 
     @app.route("/join/<room_id>")
+    @disable
     def join(room_id):
-        return render_template(
-            "join_room.html",
-            room_id=room_id
-        )
+        return render_template("join_room.html", room_id=room_id)
 
     @app.route("/lobby/<room_id>", methods=["GET", "POST"])
+    @disable
     def lobby(room_id):
         response = make_response(
             render_template(
@@ -85,6 +86,7 @@ def create_app():
         return response
 
     @app.route("/game/<room_id>")
+    @disable
     def game(room_id):
         try:
             room = closestwins_api.get_room(room_id)

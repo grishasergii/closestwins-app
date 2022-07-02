@@ -32,6 +32,7 @@ class Question:
 @dataclass
 class RoomSettings:
     """Room settings model."""
+
     number_of_questions: int
     round_duration_seconds: int
 
@@ -39,6 +40,7 @@ class RoomSettings:
 @dataclass
 class Room:
     """Room model."""
+
     room_id: str
     settings: RoomSettings
     current_question_index: int
