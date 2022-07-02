@@ -21,7 +21,7 @@ jobs:
       - name: Install Serveless
         run: npm install -g serverless
       - name: Remove PR stack
-        run: serverless remove --stage pr-${{ github.event.number }}
+        run: serverless remove --stage testing-pr-${{ github.event.number }}
         env:
           AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
           AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
