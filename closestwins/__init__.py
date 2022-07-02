@@ -157,7 +157,7 @@ def create_app():
         return render_template("internal_server_error.html")
 
     @app.errorhandler(404)
-    def internal_server_error(_):
+    def not_found_error(_):
         return render_template("not_found_error.html")
 
     return app
