@@ -23,55 +23,23 @@ jobs:
         run: echo "PYTHONPATH=${PYTHONPATH}:src" >> $GITHUB_ENV
       - name: Pylint
         run: pipenv run pylint $SOURCE_FOLDER
-      - name: Pycodestyle
-        run: pipenv run pycodestyle $SOURCE_FOLDER
-      - name: Flake8
-        run: pipenv run flake8 $SOURCE_FOLDER
       - name: Isort
         run: pipenv run isort $SOURCE_FOLDER --profile black --check-only
       - name: Black
         run: pipenv run black $SOURCE_FOLDER --check
 
-  yaml-linter:
-    name: Lint YAML
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ibiqlik/action-yamllint@v3.0.0
-        with:
-          file_or_dir: serverless.yml
-
   provision-pr-stack:
     name: Provision PR stack
     needs:
-      - yaml-linter
       - python-linter
-    runs-on: ubuntu-latest
-    env:
-      BRANCH: pr-${{ github.event.number }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install pipenv
-        run: python -m pip install --upgrade pip wheel pipenv
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 17
-      - run: npm ci
-      - name: Install Serveless
-        run: npm install -g serverless
-      - name: Deploy
-        run: serverless deploy --stage pr-${{ github.event.number }}
-        env:
-          AWS_REGION: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
-          SHARED_API_BRANCH: master
-          ENVIRONMENT: prod
-          MAP_API_KEY: ${{ secrets.MAP_API_KEY }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      branch: pr-${{ github.event.number }}
+      environment: testing
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
+      aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+      artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+      cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
+      map_api_key: ${{ secrets.MAP_API_KEY }}
