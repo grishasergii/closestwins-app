@@ -54,5 +54,5 @@ jobs:
           AWS_REGION: ${{ secrets.aws_region }}
           AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.artifacts_bucket }}
           SHARED_API_BRANCH: master
-          ENVIRONMENT: $ {{ inputs.environment}}
+          ENVIRONMENT: ${{ inputs.environment}}
           MAP_API_KEY: ${{ secrets.map_api_key }}
