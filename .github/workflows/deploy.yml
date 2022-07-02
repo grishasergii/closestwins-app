@@ -49,7 +49,7 @@ jobs:
       - name: Install Serveless
         run: npm install -g serverless
       - name: Deploy
-        run: serverless deploy --stage $ {{ inputs.environment}}-${{ inputs.branch }}
+        run: serverless deploy --stage ${{ inputs.environment}}-${{ inputs.branch }}
         env:
           AWS_REGION: ${{ secrets.aws_region }}
           AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.artifacts_bucket }}
