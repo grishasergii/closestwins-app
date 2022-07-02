@@ -1,14 +1,17 @@
 """Closest wins application."""
 
 import json
+import logging
 import os
 
 from flask import Flask, abort, make_response, render_template, request, url_for
 from geopy import distance
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, RequestException
 
 from closestwins.api.api import ClosestwinsApi
 from closestwins.utils import disable
+
+logger = logging.getLogger(__name__)
 
 
 def create_app():
@@ -111,11 +114,18 @@ def create_app():
             abort(500)
 
         answer = json.loads(answer_form)
-        question = closestwins_api.get_question(answer["question_id"])
 
+        question_id = answer["question_id"]
         city_name = answer["city_name"]
         lat = answer["lat"]
         lng = answer["lng"]
+
+        try:
+            closestwins_api.save_answer(question_id, lat, lng)
+        except RequestException:
+            logger.error("Cloud not save answer")
+
+        question = closestwins_api.get_question(answer["question_id"])
 
         lat_true = question.lat
         lng_true = question.lng

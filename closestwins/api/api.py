@@ -31,3 +31,13 @@ class ClosestwinsApi:
         """Create a multiplayer room."""
         response = self.api.rooms.post(data=json.dumps(room_settings))
         return response["room_id"]
+
+    def save_answer(self, question_id, latitude, longitude):
+        """Save an answer to a question."""
+        return self.api.answers.post(
+            json={
+                "question_id": question_id,
+                "latitude": latitude,
+                "longitude": longitude,
+            }
+        )
