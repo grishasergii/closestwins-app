@@ -32,19 +32,9 @@ jobs:
       - name: Black
         run: pipenv run black $SOURCE_FOLDER --check
 
-  yaml-linter:
-    name: Lint YAML
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ibiqlik/action-yamllint@v3.0.0
-        with:
-          file_or_dir: serverless.yml
-
   provision-pr-stack:
     name: Provision PR stack
     needs:
-      - yaml-linter
       - python-linter
     uses: ./.github/workflows/deploy.yml
     with:
