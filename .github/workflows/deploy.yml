@@ -39,6 +39,6 @@ jobs:
         with:
           branch: ${{ inputs.branch }}
           environment: ${{ inputs.environment }}
-          aws_artifacts_bucket: ${{ inputs.aws_artifacts_bucket }}
-          aws_region: ${{ inputs.aws_region }}
-          map_api_key: ${{ inputs.map_api_key }}
+          aws_artifacts_bucket: ${{ secrets.aws_artifacts_bucket }}
+          aws_region: ${{ secrets.aws_region }}
+          map_api_key: ${{ secrets.map_api_key }}
