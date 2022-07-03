@@ -17,9 +17,7 @@ on:
         required: true
       aws_region:
         required: true
-      artifacts_bucket:
-        required: true
-      cfn_bucket:
+      aws_artifacts_bucket:
         required: true
       map_api_key:
         required: true
@@ -37,22 +35,10 @@ jobs:
           aws-access-key-id: ${{ secrets.aws_access_key_id }}
           aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
           aws-region: ${{ secrets.aws_region }}
-      - uses: actions/setup-python@v2
+      - uses: ./actions/deploy
         with:
-          python-version: 3.9
-      - name: Install pipenv
-        run: python -m pip install --upgrade pip wheel pipenv
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 17
-      - run: npm ci
-      - name: Install Serveless
-        run: npm install -g serverless
-      - name: Deploy
-        run: serverless deploy --stage ${{ inputs.environment}}-${{ inputs.branch }}
-        env:
-          AWS_REGION: ${{ secrets.aws_region }}
-          AWS_CLOSESTWINS_ARTIFACTS_BUCKET: ${{ secrets.artifacts_bucket }}
-          SHARED_API_BRANCH: master
-          ENVIRONMENT: ${{ inputs.environment}}
-          MAP_API_KEY: ${{ secrets.map_api_key }}
+          branch: ${{ inputs.branch }}
+          environment: ${{ inputs.environment }}
+          aws_artifacts_bucket: ${{ secrets.aws_artifacts_bucket }}
+          aws_region: ${{ secrets.aws_region }}
+          map_api_key: ${{ secrets.map_api_key }}
