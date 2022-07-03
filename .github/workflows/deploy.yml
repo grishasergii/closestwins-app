@@ -17,7 +17,7 @@ on:
         required: true
       aws_region:
         required: true
-      artifacts_bucket:
+      aws_artifacts_bucket:
         required: true
       map_api_key:
         required: true

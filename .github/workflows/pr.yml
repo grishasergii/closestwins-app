@@ -40,5 +40,5 @@ jobs:
       aws_access_key_id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
       aws_secret_access_key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
       aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-      artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+      aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
       map_api_key: ${{ secrets.MAP_API_KEY }}
