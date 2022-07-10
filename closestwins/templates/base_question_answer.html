@@ -14,7 +14,7 @@
 <div class="container-fluid g-0">
 	<div class="row g-0">
 		<div class="col-md-3 bg-light">
-			<div class="card bg-secondary text-white m-3">
+			<div class="card bg-success bg-gradient text-white m-3">
 					<div class="card-body">
 						<h3 class="card-title"><a href="/" style="text-decoration: none; color: inherit;">Closest Wins &#11088; &#127919;</a></h3>
 					</div>
@@ -53,7 +53,7 @@
 	var mapEvents = new H.mapevents.MapEvents(map);
 	var behavior = new H.mapevents.Behavior(mapEvents);
 
-	var ui = H.ui.UI.createDefault(map, maptypes); 
+	var ui = H.ui.UI.createDefault(map, []);
 </script>
 
 {% endblock %}
